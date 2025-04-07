@@ -1,0 +1,62 @@
+<%= turbo_frame_tag "accommodation_card_#{accommodation.id}" do %>
+  <div id="accommodation_card_id_#{accommodation.id}" class="group text-sm min-w-[200px] relative">
+
+  <% if show_favorite_button?(accommodation) %>
+    <%= turbo_frame_tag "favorite_heart_button_#{accommodation.id}" do %>
+      <%= render "user_favorites/button", user_favorite: accommodation.user_favorite(current_user), accommodation: accommodation, view_type: 'index' %>
+    <% end %>
+  <% end %>
+
+  <% if accommodation.owner == current_user %>
+    <span class="absolute top-2 right-2 z-20 inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset select-none">Owner</span>
+  <% end %>
+
+  <%= link_to accommodation_path(accommodation), data: { turbo_frame: "_top" } do %>
+  <div data-controller="carousel" class="relative overflow-hidden rounded-lg group">
+    <% if accommodation.images.present? %>
+      <%= link_to accommodation_path(accommodation), class: "block hover:opacity-75", data: { turbo_frame: "_top" } do %>
+        <div class="carousel-container overflow-hidden rounded-lg">
+          <div class="carousel-slides flex transition-transform duration-500" data-carousel-target="slides">
+            <% accommodation.images.each do |image| %>
+              <div class="carousel-slide min-w-full relative">
+                <%= image_tag url_for(image), class: "aspect-square w-full bg-gray-100 object-cover" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <% if accommodation.images.count > 1 %>
+        <button data-action="carousel#prev" class="carousel-prev absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-10 focus:outline-none opacity-0 transition-opacity group-hover:opacity-100">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button data-action="carousel#next" class="carousel-next absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 rounded-full shadow-md z-10 focus:outline-none opacity-0 transition-opacity group-hover:opacity-100">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      <% end %>
+    <% else %>
+      <%= link_to accommodation_path(accommodation), class: "block hover:opacity-75", data: { turbo_frame: "_top" } do %>
+        <img src="https://placehold.co/600x400"
+             alt="Default accommodation image"
+             class="aspect-square w-full bg-gray-100 object-cover group-hover:opacity-75">
+      <% end %>
+    <% end %>
+  </div>
+
+  <%= link_to accommodation_path(accommodation), class: "block hover:opacity-75", data: { turbo_frame: "_top" } do %>
+    <h3 class="mt-4 font-medium text-gray-900">
+      <%= accommodation.title %>
+    </h3>
+    <p class="text-gray-500 italic">
+      <%= accommodation.city %>, <%= accommodation.country %>
+    </p>
+    <p class="mt-2 font-medium text-gray-900">
+      <b><%= number_to_currency(accommodation.price, unit: "€", separator: ",", delimiter: ".") %></b> per night
+    </p>
+  <% end %>
+  <% end %>
+    </div>
+<% end %>

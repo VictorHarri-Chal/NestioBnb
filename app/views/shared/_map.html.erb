@@ -1,0 +1,7 @@
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
+
+<div class="<%= css_class %>"
+  data-controller="map"
+  data-map-markers-value="<%= markers.to_json %>"
+  data-map-api-key-value="<%= Rails.application.credentials.mapbox_token %>">
+</div>

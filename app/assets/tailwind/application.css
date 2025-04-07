@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Artegra Sans';
+  src: url('artegra-sans-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Artegra Sans Bold';
+  src: url('artegra_sans-700-bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: bold;
+  font-display: swap;
+}
+html, body {
+  font-family: 'Artegra Sans', sans-serif;
+}
+
+h3 {
+  font-family: 'Artegra Sans Bold', sans-serif;
+}

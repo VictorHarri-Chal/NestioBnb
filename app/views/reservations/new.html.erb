@@ -1,0 +1,100 @@
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+  <div class="mt-8 mb-6 flex w-full justify-between items-center">
+    <h3 class="text-3xl font-bold">Booking Request</h3>
+    <%= link_to accommodation_path(@accommodation, anchor: 'ratings'), class: "text-gray-600" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <!-- Left column - Reservation details -->
+    <div class="lg:col-span-2">
+
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4">Your Trip</h2>
+
+        <div class="flex justify-between items-center py-4 border-b border-gray-200">
+          <div>
+            <h3 class="font-bold">Dates</h3>
+            <p class="text-gray-700"><%= @start_date %> - <%= @end_date %></p>
+          </div>
+          <%= link_to accommodation_path(@accommodation, anchor: "start_date"), class: "text-gray-900 font-medium underline" do %>
+            Modify
+          <% end %>
+        </div>
+
+        <div class="flex justify-between items-center py-4 border-b border-gray-200">
+          <div>
+            <h3 class="font-bold">Travelers</h3>
+            <p class="text-gray-700"><%= params[:guests] || '1' %> traveler</p>
+          </div>
+          <%= link_to accommodation_path(@accommodation, anchor: "guests"), class: "text-gray-900 font-medium underline" do %>
+            Modify
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4">Choose how you want to pay</h2>
+
+        <div class="border border-gray-300 rounded-xl mb-3">
+          <div class="p-4 flex items-center">
+            <div class="h-6 w-6 rounded-full border-2 border-gray-800 flex items-center justify-center mr-3">
+              <div class="h-3 w-3 rounded-full bg-gray-800"></div>
+            </div>
+            <span class="font-medium">Pay <%= number_to_currency(@total_price, unit: '€', separator: ',', delimiter: ' ') %> now</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 w-full">
+      <div class="bg-white rounded-xl border border-gray-200 p-6 sticky top-4">
+        <div class="flex mb-4">
+          <div class="mr-4">
+            <% if @accommodation.images.attached? %>
+              <%= image_tag @accommodation.images.first, alt: @accommodation.title, class: "w-24 h-24 object-cover rounded-lg" %>
+            <% else %>
+              <%= image_tag "https://placehold.co/24x24", alt: @accommodation.title, class: "w-24 h-24 object-cover rounded-lg" %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-6 mt-6">
+          <h3 class="text-xl font-bold mb-4">Price Details</h3>
+
+          <div class="flex justify-between mb-3">
+            <span><%= number_to_currency(@accommodation.price, unit: '€', separator: ',', delimiter: ' ') %> x <%= @nights || '5' %> nights</span>
+            <span><%= number_to_currency(@subtotal, unit: '€', separator: ',', delimiter: ' ') %></span>
+          </div>
+
+          <div class="flex justify-between mb-3">
+            <span>Airbnb Service Fee</span>
+            <span><%= number_to_currency(@service_fee, unit: '€', separator: ',', delimiter: ' ') %></span>
+          </div>
+
+          <div class="flex justify-between mb-3">
+            <span>Taxes</span>
+            <span><%= number_to_currency(@taxes, unit: '€', separator: ',', delimiter: ' ') %></span>
+          </div>
+
+          <div class="flex justify-between font-bold pt-4 border-t border-gray-200 mt-4">
+            <span>Total (EUR)</span>
+            <span><%= number_to_currency(@total_price, unit: '€', separator: ',', delimiter: ' ') %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <%= form_with(model: [@accommodation, Reservation.new], url: accommodation_reservations_path(@accommodation), method: :post, local: true) do |form| %>
+
+    <%= form.hidden_field :start_date, value: @start_date %>
+    <%= form.hidden_field :end_date, value: @end_date %>
+
+    <%= form.submit "Book", class: "mt-6 w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 transition-colors duration-200 hover:cursor-pointer" %>
+  <% end %>
+
+</div>

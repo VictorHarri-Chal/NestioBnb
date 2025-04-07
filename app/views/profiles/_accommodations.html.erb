@@ -1,0 +1,22 @@
+<div class="relative w-full min-w-[1250px]">
+  <div class="overflow-x-auto no-scrollbar">
+    <% if @my_accommodations.any? %>
+      <div class="flex space-x-6 pb-4 max-w-[200px]">
+        <% @my_accommodations.each do |accommodation| %>
+          <div class="bg-white rounded-lg shadow p-4">
+            <%= link_to accommodation_path(accommodation) do %>
+              <%= render "accommodations/card", accommodation: accommodation %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-indigo-50 rounded-lg p-6 text-gray-500 text-center">
+        You don't have any accommodations yet
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="flex justify-end items-center mt-4">
+  <%= link_to "New accommodation", new_accommodation_path, class: "px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" %>
+</div>

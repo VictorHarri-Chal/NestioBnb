@@ -1,0 +1,58 @@
+<div class="fixed inset-0 bg-black/50 transition-opacity z-50">
+  <div class="fixed inset-0 overflow-y-auto">
+    <div class="flex min-h-full items-center justify-center p-4 text-center">
+      <div class="relative transform overflow-hidden rounded-lg bg-white px-8 pt-5 pb-6 text-left shadow-xl transition-all w-full max-w-md">
+        <div class="absolute right-0 top-0 pr-4 pt-4">
+          <button type="button" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none cursor-pointer" data-action="click->modal#closeForm">
+            <span class="sr-only">Close</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="sm:flex sm:items-start">
+          <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+            <h3 class="text-2xl font-semibold leading-6 text-gray-900 mb-6">Add a rating</h3>
+
+            <%= simple_form_for notation, url: notations_path(accommodation_id: accommodation.id) do |f| %>
+              <div>
+                <%= f.label :note, "Rating", class: "block text-sm font-medium text-gray-700" %>
+                <div class="mt-1 flex items-center space-x-1" data-controller="rating">
+                  <% 5.times do |i| %>
+                    <div class="relative">
+                      <input type="radio" name="notation[note]" value="<%= i + 1 %>" class="hidden" id="note_<%= i + 1 %>" data-action="change->rating#updateStars">
+                      <label for="note_<%= i + 1 %>" class="cursor-pointer">
+                        <svg class="w-8 h-8 text-gray-300 hover:text-indigo-500 transition-colors" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd" />
+                        </svg>
+                      </label>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+
+              <div>
+                <%= f.label :title, "Title", class: "block text-sm font-medium text-gray-700" %>
+                <div class="mt-1">
+                  <%= f.text_field :title, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm placeholder:text-gray-400 h-10 px-2" %>
+                </div>
+              </div>
+
+              <div>
+                <%= f.label :description, "Description", class: "block text-sm font-medium text-gray-700" %>
+                <div class="mt-1">
+                  <%= f.text_area :description, rows: 4, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" %>
+                </div>
+              </div>
+
+              <div class="mt-6 flex justify-end">
+                <%= f.submit "Submit rating", class: "inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

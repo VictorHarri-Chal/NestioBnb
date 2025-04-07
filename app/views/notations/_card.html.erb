@@ -1,0 +1,12 @@
+<article>
+    <div class="flex items-center">
+        <div class="font-medium">
+            <p><%= notation.user.email %></p>
+        </div>
+    </div>
+    <h3 class="text-lg font-bold mb-2"><%= notation.title %></h3>
+    <%= render "notations/stars", note: notation.note.to_f %>
+    <p class="mb-2 text-gray-500 dark:text-gray-400">
+      <%= notation.description %>
+    </p>
+</article>

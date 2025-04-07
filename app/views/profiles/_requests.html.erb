@@ -1,0 +1,54 @@
+<div class="relative w-full min-w-[1250px]">
+  <div class="overflow-x-auto no-scrollbar">
+    <% if @received_requests.any? %>
+      <div class="flex space-x-6 pb-4 w-max max-w-[200px]">
+        <% @received_requests.each do |request| %>
+          <div class="bg-white rounded-lg shadow p-4">
+            <%= link_to accommodation_path(request.accommodation) do %>
+              <%= render "accommodations/card", accommodation: request.accommodation %>
+            <% end %>
+            <div class="mt-4 space-y-2">
+              <p class="text-gray-600">
+                From: <%= request.occupant.email %>
+                <br>
+                Start date: <%= request.start_date.strftime("%d/%m/%Y") %>
+                <br>
+                End date: <%= request.end_date.strftime("%d/%m/%Y") %>
+                <% if request.status != "pending" %>
+                  <div class="mt-4 pt-3 border-t border-gray-200">
+                    <div class="flex justify-between items-center">
+                      <span class="inline-block px-4 py-2 text-sm font-semibold rounded-full <%= reservation_status_classes(request.status) %>">
+                        <%= request.status.text %>
+                      </span>
+                    </div>
+                  </div>
+                <% end %>
+              </p>
+              <% if request.status == "pending" %>
+                <div class="mt-4 pt-3 border-t border-gray-200 flex space-x-2 justify-center items-center">
+                  <%= button_to accept_reservation_path(request),
+                      method: :patch,
+                      data: { turbo_frame: "_top" },
+                      class: "px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700" do %>
+                    Accept
+                  <% end %>
+
+                  <%= button_to reject_reservation_path(request),
+                      method: :patch,
+                      data: { turbo_frame: "_top" },
+                      class: "px-4 py-2 bg-rose-600 text-white rounded-md hover:bg-rose-700" do %>
+                    Refuse
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-indigo-50 rounded-lg p-6 text-gray-500 text-center">
+        You don't have any requests yet
+      </div>
+    <% end %>
+  </div>
+</div>

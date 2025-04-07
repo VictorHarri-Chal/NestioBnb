@@ -1,0 +1,32 @@
+<div class="relative w-full min-w-[1250px]">
+  <div class="overflow-x-auto no-scrollbar">
+    <% if @my_reservations.any? %>
+      <div class="flex space-x-6 pb-4 w-max max-w-[200px]">
+        <% @my_reservations.each do |reservation| %>
+          <div class="bg-white rounded-lg shadow p-4 relative min-h-[460px]">
+            <%= link_to accommodation_path(reservation.accommodation) do %>
+              <%= render "accommodations/card", accommodation: reservation.accommodation %>
+            <% end %>
+            <div class="mt-4 space-y-2">
+              <p class="text-gray-600">
+                Start date: <%= reservation.start_date.strftime("%d/%m/%Y") %>
+                <br>
+                End date: <%= reservation.end_date.strftime("%d/%m/%Y") %>
+              </p>
+            </div>
+            <br/>
+            <div class="flex justify-between items-center mt-auto pt-3 border-t border-gray-200 absolute bottom-4 left-4 right-4">
+              <span class="inline-block px-4 py-2 text-sm font-semibold rounded-full <%= reservation_status_classes(reservation.status) %>">
+                  <%= reservation.status.text %>
+              </span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-indigo-50 rounded-lg p-6 text-gray-500 text-center">
+        You don't have any reservations yet
+      </div>
+    <% end %>
+  </div>
+</div>

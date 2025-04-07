@@ -1,0 +1,81 @@
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <%= image_tag "logo.png", class: "mx-auto h-16 w-auto", alt: "Your Logo" %>
+    <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Edit Account</h2>
+  </div>
+
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+
+      <div>
+        <label for="name" class="block text-sm/6 font-medium text-gray-900">Name</label>
+        <div class="mt-2">
+          <%= f.input :name,
+                label: false,
+                required: true,
+                autofocus: true %>
+        </div>
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
+        <div class="mt-2">
+          <%= f.input :email,
+                label: false,
+                required: true,
+                autofocus: true %>
+        </div>
+      </div>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <p class="mt-2 text-sm text-gray-600">Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+      <% end %>
+
+      <div class="mt-6">
+        <label for="password" class="block text-sm/6 font-medium text-gray-900">New password</label>
+        <div class="mt-2">
+          <%= f.input :password,
+                label: false,
+                required: false,
+                hint: "leave blank if you don't want to change it",
+                input_html: { autocomplete: "new-password" } %>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <label for="password_confirmation" class="block text-sm/6 font-medium text-gray-900">New password confirmation</label>
+        <div class="mt-2">
+          <%= f.input :password_confirmation,
+                label: false,
+                required: false,
+                input_html: { autocomplete: "new-password" } %>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <label for="current_password" class="block text-sm/6 font-medium text-gray-900">Current password</label>
+        <div class="mt-2">
+          <%= f.input :current_password,
+                label: false,
+                required: true,
+                hint: "we need your current password to confirm your changes",
+                input_html: { autocomplete: "current-password" } %>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <%= f.button :submit, "Update", class: "flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+      </div>
+    <% end %>
+
+    <div class="mt-10 border-t border-gray-200 pt-6">
+      <%= button_to "Delete my account",
+          registration_path(resource_name),
+          data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" },
+          method: :delete,
+          class: "mt-4 text-sm font-semibold text-red-600 hover:text-red-500" %>
+    </div>
+
+    <%= link_to "Back", :back, class: "mt-6 block text-center text-sm font-semibold text-indigo-600 hover:text-indigo-500" %>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+<%= form_with model: question, data: { controller: "reset-form", action: "turbo:submit-end->reset-form#reset" } do |f| %>
+  <div class="flex items-center gap-2 w-full">
+    <%= f.text_field :user_question, placeholder: "Ask Nestio AI", class: "w-full pr-24 focus:outline-none", data: { action: "input->reset-form#toggleButton", reset_form_target: "input" } %>
+    <%= f.submit "Send", id: "new-question-button", class: "absolute right-0 rounded-md bg-indigo-600 px-4 py-1.5 mr-4 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500", data: { reset_form_target: "submit" }, disabled: true %>
+  </div>
+<% end %>

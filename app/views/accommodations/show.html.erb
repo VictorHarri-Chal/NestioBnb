@@ -1,0 +1,151 @@
+<div class="bg-white">
+  <div class="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <div>
+        <% if @accommodation.images.present? %>
+          <div class="mb-6" data-controller="carousel" id="carousel"
+               data-action="mouseenter->carousel#mouseEnter mouseleave->carousel#mouseLeave"
+               data-carousel-auto-advance-value="true">
+            <!-- Main carousel container -->
+            <div class="carousel-container overflow-hidden rounded-lg">
+              <div class="carousel-slides flex transition-transform duration-500" id="carousel-slides" data-carousel-target="slides">
+                <% @accommodation.images.each_with_index do |image, index| %>
+                  <div class="carousel-slide min-w-full">
+                    <%= image_tag url_for(image), class: "h-[500px] w-full object-cover" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <% if @accommodation.images.length > 1 %>
+              <!-- Navigation arrows -->
+              <button class="carousel-prev absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-md z-10 focus:outline-none" data-action="click->carousel#prev">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button class="carousel-next absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-md z-10 focus:outline-none" data-action="click->carousel#next">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              <!-- Thumbnails -->
+              <div class="hidden sm:flex justify-center gap-2 mb-6" data-controller="carousel-thumbnails" data-carousel-thumbnails-parent-id-value="carousel">
+                <% @accommodation.images.each_with_index do |image, index| %>
+                  <button class="carousel-thumbnail aspect-square overflow-hidden rounded-lg border-2 <%= index == 0 ? 'border-indigo-500' : 'border-transparent' %>"
+                          data-carousel-thumbnails-target="thumbnail"
+                          data-index="<%= index %>"
+                          data-action="click->carousel-thumbnails#selectThumbnail">
+                    <%= image_tag url_for(image), class: "h-full w-full object-cover" %>
+                  </button>
+                <% end %>
+              </div>
+            <% end %>
+        <% else %>
+          <div class="w-full h-24 rounded-lg bg-gray-100 flex items-center justify-center mb-6">
+            <span class="text-gray-500">Aucune image disponible</span>
+          </div>
+        <% end %>
+
+        <div class="lg:grid lg:grid-cols-3 lg:gap-x-8">
+          <div class="col-span-2">
+            <div class="border-t border-gray-200 pt-8">
+              <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-6"><%= @accommodation.title %></h1>
+
+              <div class="mb-6 border-b border-gray-200 pb-6">
+                <h2 class="text-lg font-medium text-gray-900 mb-2">Owner</h2>
+                <p class="text-gray-700"><%= @accommodation.owner.name %></p>
+                <p class="text-gray-700"><%= @accommodation.owner.email %></p>
+              </div>
+
+              <div class="mb-6 border-b border-gray-200 pb-6">
+                <h2 class="text-lg font-medium text-gray-900 mb-2">Address</h2>
+                <p class="text-gray-700"><%= @accommodation.address %></p>
+              </div>
+
+              <div class="mb-6 border-b border-gray-200 pb-6">
+                <h2 class="text-lg font-medium text-gray-900 mb-2">Description</h2>
+                <p class="text-gray-700"><%= @accommodation.description %></p>
+              </div>
+
+              <div class="mb-6 border-b border-gray-200 pb-6">
+                <h2 class="text-lg font-medium text-gray-900 mb-2">Category</h2>
+                <p class="text-gray-700"><%= @accommodation.category.humanize %></p>
+              </div>
+
+              <div class="mb-3">
+                <h2 class="text-lg font-medium text-gray-900 mb-2">Global ratings</h2>
+                <%= render "notations/recap", note: @accommodation.average_note, accommodation: @accommodation %>
+              </div>
+              <div data-controller="modal">
+                <div class="grid grid-cols-2 gap-4">
+                  <% @notations.slice(0, 4).each do |notation| %>
+                    <div class="mt-6 pt-6 relative">
+                      <div class="absolute top-0 left-[100px] right-[100px] h-[1px] bg-gray-200"></div>
+                      <%= render "notations/card", notation: notation %>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="flex items-center gap-4">
+                  <% if @notations.size > 4 %>
+                    <button type="button"
+                          class="text-indigo-500 bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-200 cursor-pointer"
+                        data-action="click->modal#open">
+                      Voir toutes les notations
+                    </button>
+                  <% end %>
+                  <% if !@user_notation.nil? %>
+                    <h1> You already rated this accommodation </h1>
+                  <% end %>
+                  <% if !@reservations.empty? && @user_notation.nil? %>
+                    <button type="button"
+                            class="text-indigo-500 bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-200 cursor-pointer"
+                            data-action="click->modal#openForm">
+                        Leave a review
+                    </button>
+                  <% end %>
+                </div>
+                <div class="hidden" data-modal-target="overlay">
+                  <%= render "notations/modal", notations: @notations %>
+                </div>
+                <div class="hidden" data-modal-target="formOverlay">
+                  <%= render "notations/form", accommodation: @accommodation, notation: @notation %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% if @accommodation.owner != current_user %>
+            <% if @reservation.present? %>
+              <%= render "accommodations/booked_card", accommodation: @accommodation %>
+            <% else %>
+              <%= render "accommodations/book_card", accommodation: @accommodation %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% if @accommodation.owner == current_user %>
+  <div class="w-full mx-auto px-4 pb-16 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row gap-4 w-full">
+      <%= link_to edit_accommodation_path(@accommodation), class: "flex-1 w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+        Modifier
+      <% end %>
+
+      <%= button_to accommodation_path(@accommodation),
+          method: :delete,
+          data: { turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce logement ?" },
+          class: "flex-1 w-full flex items-center justify-center rounded-md border border-red-300 bg-white px-8 py-3 text-base font-medium text-red-700 hover:bg-red-50 transition-colors duration-200" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+        Supprimer
+      <% end %>
+    </div>
+  </div>
+<% end %>
+</div>

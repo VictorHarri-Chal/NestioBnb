@@ -1,0 +1,28 @@
+<div class="relative w-full min-w-[1250px]">
+  <div class="overflow-x-auto no-scrollbar">
+    <% if @my_favorites.present? %>
+      <div class="flex space-x-6 pb-4 w-max max-w-[200px]" id="favorites-container">
+        <% @my_favorites.each do |favorite| %>
+          <%= turbo_frame_tag "favorite_#{favorite.id}" do %>
+            <div class="bg-white rounded-lg shadow p-4 min-h-[380px] relative">
+              <%= link_to accommodation_path(favorite.accommodation) do %>
+                <%= render "accommodations/card", accommodation: favorite.accommodation %>
+              <% end %>
+              <%= button_to dislike_accommodation_path(favorite.accommodation, view_type: "profile"),
+                          method: :post,
+                          class: "absolute bottom-4 left-4 right-4 flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors duration-200 hover:cursor-pointer" do %>
+                Remove from favorites
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <%= turbo_frame_tag "empty_favorites" do %>
+        <div class="bg-indigo-50 rounded-lg p-6 text-gray-500 text-center">
+          You don't have any favorites yet
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

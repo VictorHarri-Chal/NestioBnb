@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  accomodation: one
+  status: MyString
+  user.references: MyString
+  start_date: 2025-04-01
+  end_start: 2025-04-01
+
+two:
+  accomodation: two
+  status: MyString
+  user.references: MyString
+  start_date: 2025-04-01
+  end_start: 2025-04-01
